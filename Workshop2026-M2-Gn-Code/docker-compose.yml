@@ -1,0 +1,337 @@
+# PROJECT RESILIENCE-ALPHA — plateforme de paiement fictive à reprise autonome
+# Un seul point d'entrée exposé : le WAF (port 8080). Tout le reste est interne.
+# Réseaux cloisonnés : edge / app / data / obs / control.
+
+name: resilience-alpha
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+networks:
+  edge:        # zone exposée au PC Attaquant via le point d'accès Windows
+  app:         # trafic métier interne
+  data:        # base + secrets, aucun port publié
+  obs:         # observabilité
+  control:     # remediation-engine <-> docker-socket-proxy uniquement
+
+volumes:
+  pgdata:
+  vaultdata:
+  lokidata:
+  grafanadata:
+  promdata:
+  facedata:     # modèle de reconnaissance faciale (consigne additionnelle 1)
+  # La liste de blocage est un bind-mount (./runtime/blocklist) : livrée initialisée
+  # et partagée en lecture par le WAF, en écriture par le moteur de remédiation.
+
+services:
+  # ---------------------------------------------------------------- WAF (seul exposé)
+  waf:
+    image: owasp/modsecurity-crs:nginx-alpine
+    container_name: waf
+    restart: unless-stopped
+    depends_on: [front, payment-api, auth-service, grafana]
+    environment:
+      PARANOIA: "1"
+      ANOMALY_INBOUND: "5"
+      ANOMALY_OUTBOUND: "4"
+      MODSEC_RULE_ENGINE: "On"
+      BACKEND: "http://payment-api:8000"
+      NGINX_ALWAYS_TLS_REDIRECT: "off"
+      # Images base64 de la caméra (2FA) : relever la limite de corps sans fichier (défaut 128 Ko).
+      MODSEC_REQ_BODY_NOFILES_LIMIT: "4194304"
+    ports:
+      # SEUL port publié. HOST_PORT=8080 par défaut ; configurable si 8080 est pris
+      # (ici Oracle TNS occupe 8080 → on utilise 8088 via .env).
+      - "${HOST_PORT:-8080}:8080"
+    volumes:
+      - ./services/waf/nginx.conf.template:/etc/nginx/templates/conf.d/default.conf.template:ro
+      - ./services/waf/modsecurity-override.conf:/etc/nginx/templates/modsecurity.d/modsecurity-override.conf.template:ro
+      - ./runtime/blocklist:/etc/nginx/blocklist
+    networks: [edge, app]
+    # Le healthcheck intégré de l'image vise un autre port ; on le remplace par un
+    # test sur notre point d'entrée réel (API via le WAF).
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Front (SPA React/Tailwind)
+  # SWAP : 10 pages (tableau de bord, paiement, historique, bénéficiaires, profil,
+  # status page, supervision ops, utilisateurs). La supervision remplace l'ancien
+  # conteneur "dashboard".
+  front:
+    build: ./services/front
+    container_name: front
+    restart: unless-stopped
+    networks: [app]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Authentification (JWT)
+  auth-service:
+    build: ./services/auth-service
+    container_name: auth-service
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      FACE_AUTH_URL: http://face-auth:8080
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      MQTT_PUB_USER: ${MQTT_PUB_USER}
+      MQTT_PUB_PASS: ${MQTT_PUB_PASS}
+      MQTT_TOPIC: ${MQTT_TOPIC}
+      BACKOFFICE_MAX_ATTEMPTS: ${BACKOFFICE_MAX_ATTEMPTS}
+      BACKOFFICE_BLOCK_SECONDS: ${BACKOFFICE_BLOCK_SECONDS}
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [app, data]
+    read_only: true
+    tmpfs: ["/tmp"]
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Broker MQTT (consigne add. 1)
+  mosquitto:
+    build: ./services/mosquitto
+    container_name: mosquitto
+    restart: unless-stopped
+    environment:
+      MQTT_PUB_USER: ${MQTT_PUB_USER}
+      MQTT_PUB_PASS: ${MQTT_PUB_PASS}
+      MQTT_ESP_USER: ${MQTT_ESP_USER}
+      MQTT_ESP_PASS: ${MQTT_ESP_PASS}
+    ports:
+      - "1883:1883"      # publié sur le réseau du groupe pour le SEUL ESP8266
+    networks: [app]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Reconnaissance faciale (consigne add. 1)
+  face-auth:
+    build: ./services/face-auth
+    container_name: face-auth
+    restart: unless-stopped
+    environment:
+      FACE_THRESHOLD: ${FACE_THRESHOLD}
+    volumes:
+      - facedata:/data
+    networks: [app]          # interne uniquement
+    security_opt: ["no-new-privileges:true"]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- API de paiement
+  payment-api:
+    build: ./services/payment-api
+    container_name: payment-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      WORKERS: "2"
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [app, data, obs]
+    read_only: true
+    tmpfs: ["/tmp"]
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    deploy:
+      resources:
+        limits: {cpus: "1.0", memory: 512M}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Base de données
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks: [data]        # AUCUN port publié
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    security_opt: ["no-new-privileges:true"]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Secrets
+  vault:
+    image: hashicorp/vault:1.17
+    container_name: vault
+    restart: unless-stopped
+    cap_add: ["IPC_LOCK"]
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_TOKEN}
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
+    command: ["vault", "server", "-dev"]
+    volumes:
+      - vaultdata:/vault/file
+    networks: [data]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Observabilité
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - promdata:/prometheus
+    networks: [obs, app]
+    logging: *default-logging
+
+  loki:
+    image: grafana/loki:3.1.1
+    container_name: loki
+    restart: unless-stopped
+    command: ["-config.file=/etc/loki/config.yml"]
+    volumes:
+      - ./observability/loki/loki-config.yml:/etc/loki/config.yml:ro
+      - lokidata:/loki
+    networks: [obs]
+    logging: *default-logging
+
+  promtail:
+    image: grafana/promtail:3.1.1
+    container_name: promtail
+    restart: unless-stopped
+    command: ["-config.file=/etc/promtail/config.yml"]
+    volumes:
+      - ./observability/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [obs]
+    logging: *default-logging
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: grafana
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      # root_url relatif : Grafana génère ses liens à partir du host/port réellement
+      # utilisé par le navigateur (8088 en local, 8080 sur le PC Hôte) sans le coder en dur.
+      GF_SERVER_ROOT_URL: "/grafana/"
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      # Accès DIRECT de confort pour l'exploitation (hors WAF). En production le
+      # dossier recommande de n'exposer que le WAF ; ce port facilite la démo locale.
+      - "3001:3000"
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafanadata:/var/lib/grafana
+    networks: [obs, app]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- IA : détection d'anomalies
+  anomaly-detector:
+    build: ./services/anomaly-detector
+    container_name: anomaly-detector
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PROMETHEUS_URL: http://prometheus:9090
+      LOKI_URL: http://loki:3100
+      REMEDIATION_URL: http://remediation-engine:9000
+      SCRAPE_INTERVAL: "10"
+      BASELINE_WINDOWS: "12"
+      MODEL_PATH: /models/isoforest.joblib
+    volumes:
+      - ./ml/models:/models:ro
+    depends_on: [prometheus, remediation-engine]
+    networks: [obs, app]
+    security_opt: ["no-new-privileges:true"]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Moteur de remédiation
+  remediation-engine:
+    build: ./services/remediation-engine
+    container_name: remediation-engine
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DOCKER_HOST: tcp://docker-socket-proxy:2375
+      WAF_CONTAINER: waf
+      API_CONTAINER: payment-api
+      PAYMENT_API_URL: http://payment-api:8000
+      AUTH_URL: http://auth-service:8000
+      PROMETHEUS_URL: http://prometheus:9090
+    volumes:
+      - ./runtime/blocklist:/etc/nginx/blocklist
+      - ./ansible:/ansible:ro
+    depends_on: [docker-socket-proxy]
+    networks: [app, control]
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    logging: *default-logging
+
+  # Médiateur d'accès au socket Docker : le moteur n'a JAMAIS le socket en direct.
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.3.0
+    container_name: docker-socket-proxy
+    restart: unless-stopped
+    environment:
+      CONTAINERS: "1"     # lecture de l'état des conteneurs
+      POST: "1"           # autorise POST...
+      RESTART: "1"        # ...uniquement restart
+      EXEC: "0"           # pas d'exec
+      IMAGES: "0"
+      NETWORKS: "0"
+      VOLUMES: "0"
+      INFO: "0"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [control]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Assistant RAG (opérateur)
+  rag-assistant:
+    build: ./services/rag-assistant
+    container_name: rag-assistant
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL}
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+    volumes:
+      - ./docs/procedures:/app/corpus/procedures:ro
+      - ./README.md:/app/corpus/README.md:ro
+    networks: [app]        # lecture seule, aucun accès data/control
+    security_opt: ["no-new-privileges:true"]
+    logging: *default-logging
+
+  # ---------------------------------------------------------------- Générateur de trafic légitime
+  traffic-generator:
+    build: ./services/traffic-generator
+    container_name: traffic-generator
+    restart: unless-stopped
+    environment:
+      TARGET: http://waf:8080
+      RATE: "5"
+    depends_on: [waf]
+    networks: [app]
+    profiles: ["baseline"]   # démarré à la demande : docker compose --profile baseline up -d
+    logging: *default-logging

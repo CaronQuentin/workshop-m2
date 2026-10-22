@@ -1,0 +1,11 @@
+# Secrets — jamais en clair dans le dépôt (cf. dossier §7.4)
+.env
+
+# Artefacts
+ml/models/*.joblib
+runtime/blocklist/denied.map
+tests/results/*.json
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store

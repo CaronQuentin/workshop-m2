@@ -1,0 +1,39 @@
+---
+# Initialisation de la plateforme : dépose les secrets dans Vault puis vérifie la
+# bonne publication des services. En production, c'est Ansible (et non un .env en
+# clair) qui injecte les secrets ; le .env local n'est qu'une commodité de démo.
+- name: Bootstrap RESILIENCE-ALPHA
+  hosts: local
+  gather_facts: false
+  vars:
+    vault_addr: "http://localhost:8200"
+    vault_token: "{{ lookup('env', 'VAULT_DEV_TOKEN') | default('root-dev-token', true) }}"
+  tasks:
+    - name: Écrire les secrets applicatifs dans Vault (KV v2)
+      ansible.builtin.uri:
+        url: "{{ vault_addr }}/v1/secret/data/resilience-alpha"
+        method: POST
+        headers:
+          X-Vault-Token: "{{ vault_token }}"
+        body_format: json
+        body:
+          data:
+            jwt_secret: "{{ lookup('env', 'JWT_SECRET') }}"
+            postgres_password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
+            remediation_token: "{{ lookup('env', 'REMEDIATION_TOKEN') }}"
+        status_code: [200, 204]
+      register: vault_write
+      failed_when: false
+
+    - name: Vérifier que le WAF publie bien le service
+      ansible.builtin.uri:
+        url: "http://localhost:8080/api/health"
+        status_code: 200
+      register: health
+      retries: 10
+      delay: 3
+      until: health.status == 200
+
+    - name: Résumé
+      ansible.builtin.debug:
+        msg: "Secrets Vault: {{ 'ok' if vault_write.status in [200,204] else 'ignoré (dev)' }} | API /health: {{ health.status }}"

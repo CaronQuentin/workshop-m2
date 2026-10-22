@@ -1,0 +1,3 @@
+essai,horodatage,type,delai_detection_s,temps_reprise_s,mttr_total_s,paiements_perdus,resultat
+1,2026-10-22T09:13:34Z,flood,74.6,18.7,93.3,0,verifie
+2,2026-10-22T09:12:14Z,flood,10.4,4.5,14.9,0,verifie

@@ -1,0 +1,47 @@
+{
+  "title": "RESILIENCE-ALPHA — Service de paiement",
+  "uid": "resilience-alpha",
+  "tags": ["workshop", "paiement", "soc"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": {"from": "now-15m", "to": "now"},
+  "panels": [
+    {
+      "id": 1, "title": "Requêtes/s sur /payments", "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"},
+        "expr": "sum(rate(http_requests_total{path=\"/payments\"}[30s]))", "legendFormat": "rps"}]
+    },
+    {
+      "id": 2, "title": "Latence p95 POST /payments (s)", "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"},
+        "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{path=\"/payments\"}[30s])) by (le))", "legendFormat": "p95"}]
+    },
+    {
+      "id": 3, "title": "Taux de réponses 5xx", "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"},
+        "expr": "(sum(rate(http_requests_total{status=~\"5..\"}[30s])) or vector(0)) / clamp_min(sum(rate(http_requests_total[30s])), 0.001)", "legendFormat": "ratio 5xx"}]
+    },
+    {
+      "id": 4, "title": "Paiements créés (ok vs erreur)", "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"},
+        "expr": "sum(rate(payments_total[1m])) by (result)", "legendFormat": "{{result}}"}]
+    },
+    {
+      "id": 5, "title": "SOC — remédiation & blocages WAF (logs)", "type": "logs",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 16},
+      "datasource": {"type": "loki", "uid": "loki"},
+      "targets": [{"refId": "A", "datasource": {"type": "loki", "uid": "loki"},
+        "expr": "{container=~\"remediation-engine|waf|anomaly-detector\"}"}]
+    }
+  ]
+}

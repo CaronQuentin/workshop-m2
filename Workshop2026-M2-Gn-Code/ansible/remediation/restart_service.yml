@@ -1,0 +1,20 @@
+---
+# Playbook de remédiation — relance d'un service métier défaillant.
+# Usage : ansible-playbook remediation/restart_service.yml -e service=payment-api
+- name: Relancer un service
+  hosts: local
+  gather_facts: false
+  tasks:
+    - name: Redémarrer le conteneur
+      community.docker.docker_container:
+        name: "{{ service }}"
+        restart: true
+
+    - name: Attendre le rétablissement de /health via le WAF
+      ansible.builtin.uri:
+        url: "http://localhost:8080/api/health"
+        status_code: 200
+      register: health
+      retries: 15
+      delay: 2
+      until: health.status == 200

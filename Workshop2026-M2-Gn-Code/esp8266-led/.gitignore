@@ -1,0 +1,3 @@
+# Identifiants Wi-Fi/MQTT — jamais versionnés
+include/config.h
+.pio/

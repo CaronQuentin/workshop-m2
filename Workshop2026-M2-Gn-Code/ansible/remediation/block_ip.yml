@@ -1,0 +1,26 @@
+---
+# Playbook de remédiation — blocage d'une IP source au WAF.
+# Équivalent déclaratif de l'action exécutée par le moteur (catalogue §5).
+# Usage : ansible-playbook remediation/block_ip.yml -e ip=203.0.113.10
+- name: Bloquer une IP au WAF
+  hosts: local
+  gather_facts: false
+  vars:
+    blocklist_file: "../runtime/blocklist/denied.map"
+    waf_container: waf
+  tasks:
+    - name: Refuser de bloquer une IP de la liste blanche
+      ansible.builtin.fail:
+        msg: "IP {{ ip }} protégée (hôte/passerelle) — blocage interdit."
+      when: ip in ['192.168.137.1', '127.0.0.1', '172.17.0.1']
+
+    - name: Ajouter l'IP à la liste de blocage (format geo nginx)
+      ansible.builtin.lineinfile:
+        path: "{{ blocklist_file }}"
+        line: "{{ ip }} 1;"
+        create: true
+
+    - name: Recharger le WAF
+      community.docker.docker_container:
+        name: "{{ waf_container }}"
+        restart: true

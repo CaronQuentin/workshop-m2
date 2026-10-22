@@ -1,0 +1,69 @@
+=====================================================================
+  KIT ATTAQUANT - PROJECT RESILIENCE-ALPHA
+  A utiliser sur le PC Attaquant uniquement.
+=====================================================================
+
+OBJECTIF
+--------
+Lancer une attaque par deni de service (flood HTTP) contre la plateforme
+de paiement fictive SWAP, afin de declencher la detection et la
+remediation automatiques.
+
+PERIMETRE ET SECURITE
+---------------------
+Les scripts n'autorisent que des cibles sur RESEAU PRIVE
+(LAN, Tailscale, localhost). Aucune cible publique Internet n'est permise,
+pour eviter tout tir accidentel sur un tiers.
+Ne visez QUE votre propre plateforme de test.
+
+PREREQUIS
+---------
+1. Docker Desktop installe et DEMARRE sur le PC Attaquant.
+   >>> Connexion Internet requise au premier lancement : l'image k6
+       est telechargee automatiquement depuis Docker Hub
+       (docker pull grafana/k6:latest). Ensuite elle est en cache.
+2. Le PC Attaquant doit pouvoir joindre le PC Hote. N'importe quel
+   reseau commun convient :
+     - meme Wi-Fi / meme box / meme switch (le plus simple)
+     - ou Tailscale (meme compte sur les deux PC)
+     - ou un cable Ethernet entre les deux PC
+
+TROUVER L'ADRESSE DE LA CIBLE
+-----------------------------
+Sur le PC Hote, l'equipe infra vous donne l'IP + le port.
+Exemples de cibles valides :
+   http://192.168.1.50:8088      (meme box Wi-Fi)
+   http://100.71.143.66:8088     (Tailscale)
+   http://192.168.137.1:8088     (point d'acces Windows)
+
+VERIFIER LA CONNECTIVITE (facultatif)
+-------------------------------------
+   curl http://<IP-du-PC-Hote>:8088/api/health
+Attendu : {"status":"ok"}
+
+LANCER L'ATTAQUE
+----------------
+Windows (double-clic) :
+   attaque-lourde.bat  <URL>      (flood intense, ~800 VUs)
+   attaque-normale.bat <URL>      (flood modere, ~200 VUs)
+   Exemple :  attaque-lourde.bat http://192.168.1.50:8088
+   (sans argument, la cible par defaut est http://192.168.137.1:8088)
+
+Linux / macOS :
+   chmod +x attaque.sh
+   ./attaque.sh http://192.168.1.50:8088
+   ./attaque.sh http://192.168.1.50:8088 dos.js   (attaque normale)
+
+PENDANT L'ATTAQUE, A OBSERVER (sur le PC Hote)
+----------------------------------------------
+   http://<IP-du-PC-Hote>:8088/status     (etat du service)
+   http://<IP-du-PC-Hote>:3001/           (Grafana)
+Le service passe "degrade" puis revient "operationnel" tout seul.
+
+FICHIERS DU KIT
+---------------
+dos-heavy.js      : scenario flood lourd (800 VUs)
+dos.js            : scenario flood normal (200 VUs)
+sqli.sh           : scenario secondaire (injection SQL, bloquee par le WAF)
+attaque-lourde.bat / attaque-normale.bat : lanceurs Windows
+attaque.sh        : lanceur Linux/macOS

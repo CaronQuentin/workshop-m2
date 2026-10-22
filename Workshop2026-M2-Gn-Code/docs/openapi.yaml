@@ -1,0 +1,86 @@
+openapi: 3.0.3
+info:
+  title: RESILIENCE-ALPHA — API de paiement (fictive)
+  version: 1.0.0
+  description: >
+    Contrat des API exposées via le WAF. auth-service sous /auth, payment-api sous /api.
+servers:
+  - url: http://192.168.137.1:8080
+  - url: http://localhost:8080
+paths:
+  /auth/login:
+    post:
+      summary: Authentifie un compte fictif et renvoie un JWT court
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: {type: string, example: demo}
+                password: {type: string, example: demo1234}
+      responses:
+        "200":
+          description: Jeton émis
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: {type: string}
+                  token_type: {type: string, example: bearer}
+                  expires_in: {type: integer, example: 900}
+        "401": {description: Identifiants invalides}
+  /api/health:
+    get:
+      summary: Santé du service (base incluse)
+      responses:
+        "200": {description: ok}
+        "503": {description: dégradé}
+  /api/payments:
+    post:
+      summary: Crée un paiement fictif
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount_cents]
+              properties:
+                amount_cents: {type: integer, minimum: 1, maximum: 10000000, example: 1299}
+                currency: {type: string, pattern: "^[A-Z]{3}$", example: EUR}
+      responses:
+        "201":
+          description: Paiement créé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reference: {type: string, example: PAY-ab12cd34ef56}
+                  status: {type: string, example: captured}
+                  amount_cents: {type: integer}
+        "401": {description: Jeton manquant ou invalide}
+    get:
+      summary: Liste les derniers paiements
+      security: [{bearerAuth: []}]
+      parameters:
+        - {name: limit, in: query, schema: {type: integer, default: 20, maximum: 100}}
+      responses:
+        "200": {description: Liste}
+  /api/payments/{ref}:
+    get:
+      summary: Consulte un paiement par référence
+      security: [{bearerAuth: []}]
+      parameters:
+        - {name: ref, in: path, required: true, schema: {type: string}}
+      responses:
+        "200": {description: Paiement}
+        "404": {description: Introuvable}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer, bearerFormat: JWT}

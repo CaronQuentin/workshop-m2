@@ -1,0 +1,512 @@
+{
+  "Workshop2026-M2-Gn-Code/attack/dos-heavy.js": {
+    "mtime": 1792489719.2315142,
+    "seen": 1792657423.8751872,
+    "ast_hash": "e4ac046791a8126d5ead19382866287e",
+    "semantic_hash": "e4ac046791a8126d5ead19382866287e"
+  },
+  "Workshop2026-M2-Gn-Code/attack/dos.js": {
+    "mtime": 1792489707.0219498,
+    "seen": 1792657423.875193,
+    "ast_hash": "af94e0addaefe92b6c4bd6b45efc34ad",
+    "semantic_hash": "af94e0addaefe92b6c4bd6b45efc34ad"
+  },
+  "Workshop2026-M2-Gn-Code/attack/sqli.sh": {
+    "mtime": 1792399146.1018226,
+    "seen": 1792657423.8751957,
+    "ast_hash": "ca00ec812520aa43ffcf42196ff47c55",
+    "semantic_hash": "ca00ec812520aa43ffcf42196ff47c55"
+  },
+  "Workshop2026-M2-Gn-Code/esp8266-led/include/config.example.h": {
+    "mtime": 1792568102.4601462,
+    "seen": 1792657423.8751967,
+    "ast_hash": "70af8c530757dfe38a7096a501787346",
+    "semantic_hash": "70af8c530757dfe38a7096a501787346"
+  },
+  "Workshop2026-M2-Gn-Code/esp8266-led/src/main.cpp": {
+    "mtime": 1792570731.3253956,
+    "seen": 1792657423.875198,
+    "ast_hash": "07a00fd500ed430c2b1c6736fa5dc491",
+    "semantic_hash": "07a00fd500ed430c2b1c6736fa5dc491"
+  },
+  "Workshop2026-M2-Gn-Code/ml/train.py": {
+    "mtime": 1792399109.253484,
+    "seen": 1792657423.8751986,
+    "ast_hash": "7cf9fb56364d5a240357bd555987918e",
+    "semantic_hash": "7cf9fb56364d5a240357bd555987918e"
+  },
+  "Workshop2026-M2-Gn-Code/observability/grafana/dashboards/resilience.json": {
+    "mtime": 1792403465.056798,
+    "seen": 1792657423.8751998,
+    "ast_hash": "23a2399707396671a9784115522b2155",
+    "semantic_hash": "23a2399707396671a9784115522b2155"
+  },
+  "Workshop2026-M2-Gn-Code/scripts/control_transaction.sh": {
+    "mtime": 1792399391.0911312,
+    "seen": 1792657423.8752005,
+    "ast_hash": "67d8d4ca2ff3eb6f62c0dbdc1b4ba78c",
+    "semantic_hash": "67d8d4ca2ff3eb6f62c0dbdc1b4ba78c"
+  },
+  "Workshop2026-M2-Gn-Code/scripts/demo.sh": {
+    "mtime": 1792399413.647263,
+    "seen": 1792657423.8752012,
+    "ast_hash": "e4407a0227c112b6a3a8c227375700f2",
+    "semantic_hash": "e4407a0227c112b6a3a8c227375700f2"
+  },
+  "Workshop2026-M2-Gn-Code/scripts/init_db.sql": {
+    "mtime": 1792399382.929024,
+    "seen": 1792657423.875202,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/scripts/smoke_test.sh": {
+    "mtime": 1792399399.3071754,
+    "seen": 1792657423.875203,
+    "ast_hash": "f744f261e0fb7073ec76acb2f1480b38",
+    "semantic_hash": "f744f261e0fb7073ec76acb2f1480b38"
+  },
+  "Workshop2026-M2-Gn-Code/services/anomaly-detector/detector.py": {
+    "mtime": 1792400813.7316928,
+    "seen": 1792657423.8752038,
+    "ast_hash": "521d565eafeb609b133445e72fe132ef",
+    "semantic_hash": "521d565eafeb609b133445e72fe132ef"
+  },
+  "Workshop2026-M2-Gn-Code/services/auth-service/app/main.py": {
+    "mtime": 1792575762.7143521,
+    "seen": 1792657423.8752046,
+    "ast_hash": "8e31c5e5ff7ddadf55dfc49dceab1fa0",
+    "semantic_hash": "8e31c5e5ff7ddadf55dfc49dceab1fa0"
+  },
+  "Workshop2026-M2-Gn-Code/services/face-auth/app/main.py": {
+    "mtime": 1792575748.465463,
+    "seen": 1792657423.8752053,
+    "ast_hash": "11215ea87e07b033d0573c184483bb1c",
+    "semantic_hash": "11215ea87e07b033d0573c184483bb1c"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/package.json": {
+    "mtime": 1792416044.781808,
+    "seen": 1792657423.8752062,
+    "ast_hash": "26c47b3436736e86d232b194494011a0",
+    "semantic_hash": "26c47b3436736e86d232b194494011a0"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/postcss.config.js": {
+    "mtime": 1792413156.150892,
+    "seen": 1792657423.8752072,
+    "ast_hash": "c735540bb63936a123bc867d950c9f69",
+    "semantic_hash": "c735540bb63936a123bc867d950c9f69"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/api.js": {
+    "mtime": 1792573934.8875751,
+    "seen": 1792657423.8752081,
+    "ast_hash": "d781253de18e7834a8b7f888e4a75c47",
+    "semantic_hash": "d781253de18e7834a8b7f888e4a75c47"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/auth.jsx": {
+    "mtime": 1792413186.4433022,
+    "seen": 1792657423.8752093,
+    "ast_hash": "f8746110a57c18604d04448a7c163564",
+    "semantic_hash": "f8746110a57c18604d04448a7c163564"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/components/Layout.jsx": {
+    "mtime": 1792479797.123929,
+    "seen": 1792657423.87521,
+    "ast_hash": "55f95379c55d0e36382d1735e6a668f9",
+    "semantic_hash": "55f95379c55d0e36382d1735e6a668f9"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/components/ui.jsx": {
+    "mtime": 1792413224.0740204,
+    "seen": 1792657423.8752108,
+    "ast_hash": "9af63b70c45d377a1c5b30e21d3b1f8b",
+    "semantic_hash": "9af63b70c45d377a1c5b30e21d3b1f8b"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/main.jsx": {
+    "mtime": 1792574030.9272065,
+    "seen": 1792657423.8752115,
+    "ast_hash": "cb88d21366386cb186d956429a26f838",
+    "semantic_hash": "cb88d21366386cb186d956429a26f838"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/AdminOps.jsx": {
+    "mtime": 1792660122.5721536,
+    "seen": 1792660143.1890452,
+    "ast_hash": "2ec99bd5513956276e906d0bc1ec9d77",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/AdminUsers.jsx": {
+    "mtime": 1792413374.846945,
+    "seen": 1792657423.8752136,
+    "ast_hash": "c0b3532c95e079b4279695799c58f0c0",
+    "semantic_hash": "c0b3532c95e079b4279695799c58f0c0"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/Assistant.jsx": {
+    "mtime": 1792482139.470848,
+    "seen": 1792657423.8752143,
+    "ast_hash": "c03a0f75731b9eea7eb412f056c6414c",
+    "semantic_hash": "c03a0f75731b9eea7eb412f056c6414c"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/BackOffice.jsx": {
+    "mtime": 1792573484.7907302,
+    "seen": 1792657423.875215,
+    "ast_hash": "83313500c2af89151bed1d4e2706325c",
+    "semantic_hash": "83313500c2af89151bed1d4e2706325c"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/Beneficiaries.jsx": {
+    "mtime": 1792413316.385566,
+    "seen": 1792657423.8752158,
+    "ast_hash": "812fa86be00ee164a9c4d123d932a7c1",
+    "semantic_hash": "812fa86be00ee164a9c4d123d932a7c1"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/Dashboard.jsx": {
+    "mtime": 1792416044.7928164,
+    "seen": 1792657423.8752167,
+    "ast_hash": "fa271ad25fb3b7ca7193f5cadbaf1b94",
+    "semantic_hash": "fa271ad25fb3b7ca7193f5cadbaf1b94"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/History.jsx": {
+    "mtime": 1792413290.8303947,
+    "seen": 1792657423.8752174,
+    "ast_hash": "b019e1f9d75b426446d0578e61930421",
+    "semantic_hash": "b019e1f9d75b426446d0578e61930421"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/Login.jsx": {
+    "mtime": 1792574527.480614,
+    "seen": 1792657423.8752182,
+    "ast_hash": "5219e363b8354e62427de76ba4ebb980",
+    "semantic_hash": "5219e363b8354e62427de76ba4ebb980"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/NewPayment.jsx": {
+    "mtime": 1792416328.5859704,
+    "seen": 1792657423.8752186,
+    "ast_hash": "e50f7ff97105fef94da467d7db9ed8ce",
+    "semantic_hash": "e50f7ff97105fef94da467d7db9ed8ce"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/Profile.jsx": {
+    "mtime": 1792573513.7773447,
+    "seen": 1792657423.8752198,
+    "ast_hash": "c80ac698c7294c450a4b7417b0f38ae7",
+    "semantic_hash": "c80ac698c7294c450a4b7417b0f38ae7"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/Register.jsx": {
+    "mtime": 1792574015.5271308,
+    "seen": 1792657423.8752203,
+    "ast_hash": "cd9328526b310dd8c9b5c693f5969816",
+    "semantic_hash": "cd9328526b310dd8c9b5c693f5969816"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/Status.jsx": {
+    "mtime": 1792416044.8375647,
+    "seen": 1792657423.875221,
+    "ast_hash": "54d421167515f09c0266f721b410be47",
+    "semantic_hash": "54d421167515f09c0266f721b410be47"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/src/pages/TransactionDetail.jsx": {
+    "mtime": 1792413303.404484,
+    "seen": 1792657423.8752217,
+    "ast_hash": "a39000343f2a2794df39ef2f12fcf441",
+    "semantic_hash": "a39000343f2a2794df39ef2f12fcf441"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/tailwind.config.js": {
+    "mtime": 1792413153.0288599,
+    "seen": 1792657423.8752224,
+    "ast_hash": "1558e59aa2647834b9a3cfbfc3cde186",
+    "semantic_hash": "1558e59aa2647834b9a3cfbfc3cde186"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/vite.config.js": {
+    "mtime": 1792413146.7631376,
+    "seen": 1792657423.8752234,
+    "ast_hash": "98e3dc91102504bdea823bdc665c3ed2",
+    "semantic_hash": "98e3dc91102504bdea823bdc665c3ed2"
+  },
+  "Workshop2026-M2-Gn-Code/services/mosquitto/entrypoint.sh": {
+    "mtime": 1792567944.3959174,
+    "seen": 1792657423.875224,
+    "ast_hash": "663f57b8186b0e39beffc1decaaadda1",
+    "semantic_hash": "663f57b8186b0e39beffc1decaaadda1"
+  },
+  "Workshop2026-M2-Gn-Code/services/payment-api/app/db.py": {
+    "mtime": 1792413062.236345,
+    "seen": 1792657423.875225,
+    "ast_hash": "d677b46247f42148edf17980b7a66de8",
+    "semantic_hash": "d677b46247f42148edf17980b7a66de8"
+  },
+  "Workshop2026-M2-Gn-Code/services/payment-api/app/main.py": {
+    "mtime": 1792416044.7723045,
+    "seen": 1792657423.8752258,
+    "ast_hash": "078913dfc5b51cebef5cb041f0e41a43",
+    "semantic_hash": "078913dfc5b51cebef5cb041f0e41a43"
+  },
+  "Workshop2026-M2-Gn-Code/services/rag-assistant/app.py": {
+    "mtime": 1792482029.6929874,
+    "seen": 1792657423.8752267,
+    "ast_hash": "e661f5360b63428292ab227207d25701",
+    "semantic_hash": "e661f5360b63428292ab227207d25701"
+  },
+  "Workshop2026-M2-Gn-Code/services/remediation-engine/app.py": {
+    "mtime": 1792659868.1202445,
+    "seen": 1792659900.5087252,
+    "ast_hash": "04e208e3662d76a0badd1b8c8fe3aebb",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/services/traffic-generator/gen.py": {
+    "mtime": 1792399292.812429,
+    "seen": 1792657423.8752282,
+    "ast_hash": "5e2280a581560d385fb2a83ed5c856aa",
+    "semantic_hash": "5e2280a581560d385fb2a83ed5c856aa"
+  },
+  "kit-attaquant/attaque.sh": {
+    "mtime": 1792658657.2215416,
+    "seen": 1792658672.4918487,
+    "ast_hash": "a03d75e096329f304f79dd9df4053bab",
+    "semantic_hash": ""
+  },
+  "kit-attaquant/dos-heavy.js": {
+    "mtime": 1792489719.2315142,
+    "seen": 1792657423.8752298,
+    "ast_hash": "e4ac046791a8126d5ead19382866287e",
+    "semantic_hash": "e4ac046791a8126d5ead19382866287e"
+  },
+  "kit-attaquant/dos.js": {
+    "mtime": 1792489707.0219498,
+    "seen": 1792657423.875231,
+    "ast_hash": "af94e0addaefe92b6c4bd6b45efc34ad",
+    "semantic_hash": "af94e0addaefe92b6c4bd6b45efc34ad"
+  },
+  "kit-attaquant/sqli.sh": {
+    "mtime": 1792661345.1355839,
+    "seen": 1792661462.833494,
+    "ast_hash": "fac0ba0ee672927f89ec8e5839110781",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/README.md": {
+    "mtime": 1792399538.8364327,
+    "seen": 1792657423.8752325,
+    "ast_hash": "7c231c71efda95a3e4d9aef7914d3b9e",
+    "semantic_hash": "7c231c71efda95a3e4d9aef7914d3b9e"
+  },
+  "Workshop2026-M2-Gn-Code/ansible/README.md": {
+    "mtime": 1792399489.8623004,
+    "seen": 1792657423.8752332,
+    "ast_hash": "d42dc9d2ab75a260ac89fd9c10bc4b73",
+    "semantic_hash": "d42dc9d2ab75a260ac89fd9c10bc4b73"
+  },
+  "Workshop2026-M2-Gn-Code/ansible/bootstrap.yml": {
+    "mtime": 1792399360.3273456,
+    "seen": 1792657423.875234,
+    "ast_hash": "a22357c08ec9b75be7334d5eef32a1d5",
+    "semantic_hash": "a22357c08ec9b75be7334d5eef32a1d5"
+  },
+  "Workshop2026-M2-Gn-Code/ansible/remediation/block_ip.yml": {
+    "mtime": 1792399367.647593,
+    "seen": 1792657423.8752348,
+    "ast_hash": "3ff9824229bdccf0fafe3c519421e4fc",
+    "semantic_hash": "3ff9824229bdccf0fafe3c519421e4fc"
+  },
+  "Workshop2026-M2-Gn-Code/ansible/remediation/restart_service.yml": {
+    "mtime": 1792399373.2641387,
+    "seen": 1792657423.8752356,
+    "ast_hash": "ab125e3fbb4d4676dec941d7adb1a250",
+    "semantic_hash": "ab125e3fbb4d4676dec941d7adb1a250"
+  },
+  "Workshop2026-M2-Gn-Code/docker-compose.yml": {
+    "mtime": 1792659616.5235403,
+    "seen": 1792659757.6774278,
+    "ast_hash": "f1896f78554bb9590b01add259af1dcb",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/docs/openapi.yaml": {
+    "mtime": 1792399464.7312067,
+    "seen": 1792657423.8752372,
+    "ast_hash": "1553267eaf7e390682cfa9b08a5538c1",
+    "semantic_hash": "1553267eaf7e390682cfa9b08a5538c1"
+  },
+  "Workshop2026-M2-Gn-Code/docs/procedures/architecture.md": {
+    "mtime": 1792399452.4768884,
+    "seen": 1792657423.875238,
+    "ast_hash": "3f6bda0da593f7666ea1a9feeb2c8137",
+    "semantic_hash": "3f6bda0da593f7666ea1a9feeb2c8137"
+  },
+  "Workshop2026-M2-Gn-Code/docs/procedures/incident-flood.md": {
+    "mtime": 1792399429.2852662,
+    "seen": 1792657423.8752387,
+    "ast_hash": "42a61d657f2a394f56636ad3d5dd306f",
+    "semantic_hash": "42a61d657f2a394f56636ad3d5dd306f"
+  },
+  "Workshop2026-M2-Gn-Code/docs/procedures/rollback.md": {
+    "mtime": 1792399442.3432343,
+    "seen": 1792657423.8752394,
+    "ast_hash": "5c7fc8c3af07e12688e277be1d68abae",
+    "semantic_hash": "5c7fc8c3af07e12688e277be1d68abae"
+  },
+  "Workshop2026-M2-Gn-Code/esp8266-led/README.md": {
+    "mtime": 1792568142.966259,
+    "seen": 1792657423.87524,
+    "ast_hash": "7d2ea7b70ce3cdd907c5978af32192ff",
+    "semantic_hash": "7d2ea7b70ce3cdd907c5978af32192ff"
+  },
+  "Workshop2026-M2-Gn-Code/ml/requirements.txt": {
+    "mtime": 1792399081.3624742,
+    "seen": 1792657423.8752413,
+    "ast_hash": "5a0fc6b081b2750091e53900aa68f329",
+    "semantic_hash": "5a0fc6b081b2750091e53900aa68f329"
+  },
+  "Workshop2026-M2-Gn-Code/observability/grafana/provisioning/dashboards/dashboards.yml": {
+    "mtime": 1792399176.5299954,
+    "seen": 1792657423.8752422,
+    "ast_hash": "e6aa82704717e740b1479d3cc5d2ffa6",
+    "semantic_hash": "e6aa82704717e740b1479d3cc5d2ffa6"
+  },
+  "Workshop2026-M2-Gn-Code/observability/grafana/provisioning/datasources/datasources.yml": {
+    "mtime": 1792399186.386122,
+    "seen": 1792657423.875243,
+    "ast_hash": "8bec526e155e329ccc2aa770e0c0193f",
+    "semantic_hash": "8bec526e155e329ccc2aa770e0c0193f"
+  },
+  "Workshop2026-M2-Gn-Code/observability/loki/loki-config.yml": {
+    "mtime": 1792399162.3613982,
+    "seen": 1792657423.8752437,
+    "ast_hash": "11b81ed5d1076f946ac264d1225f9262",
+    "semantic_hash": "11b81ed5d1076f946ac264d1225f9262"
+  },
+  "Workshop2026-M2-Gn-Code/observability/prometheus/prometheus.yml": {
+    "mtime": 1792399156.3660738,
+    "seen": 1792657423.8752446,
+    "ast_hash": "00cbe10d82a6b2d46ea8011896bfd30e",
+    "semantic_hash": "00cbe10d82a6b2d46ea8011896bfd30e"
+  },
+  "Workshop2026-M2-Gn-Code/observability/promtail/promtail-config.yml": {
+    "mtime": 1792399168.4082754,
+    "seen": 1792657423.8752456,
+    "ast_hash": "f6bab13f3c92f927041997886e1e3a60",
+    "semantic_hash": "f6bab13f3c92f927041997886e1e3a60"
+  },
+  "Workshop2026-M2-Gn-Code/services/anomaly-detector/requirements.txt": {
+    "mtime": 1792399035.3910134,
+    "seen": 1792657423.8752463,
+    "ast_hash": "f97a26b38f895d405271cae66641520d",
+    "semantic_hash": "f97a26b38f895d405271cae66641520d"
+  },
+  "Workshop2026-M2-Gn-Code/services/auth-service/requirements.txt": {
+    "mtime": 1792567571.7099254,
+    "seen": 1792657423.875247,
+    "ast_hash": "ea20e2417210274a7bfb4b0ae10bec06",
+    "semantic_hash": "ea20e2417210274a7bfb4b0ae10bec06"
+  },
+  "Workshop2026-M2-Gn-Code/services/face-auth/requirements.txt": {
+    "mtime": 1792575722.7975898,
+    "seen": 1792657423.875248,
+    "ast_hash": "2101d244b0036d309dd2edb505c8aa22",
+    "semantic_hash": "2101d244b0036d309dd2edb505c8aa22"
+  },
+  "Workshop2026-M2-Gn-Code/services/front/index.html": {
+    "mtime": 1792416044.7781477,
+    "seen": 1792657423.8752487,
+    "ast_hash": "44d0b955ebe3b3bfc925d98c4287a1ff",
+    "semantic_hash": "44d0b955ebe3b3bfc925d98c4287a1ff"
+  },
+  "Workshop2026-M2-Gn-Code/services/payment-api/requirements.txt": {
+    "mtime": 1792398755.232916,
+    "seen": 1792657423.8752494,
+    "ast_hash": "24641c0affdf20572296b8d578b62d3d",
+    "semantic_hash": "24641c0affdf20572296b8d578b62d3d"
+  },
+  "Workshop2026-M2-Gn-Code/services/rag-assistant/requirements.txt": {
+    "mtime": 1792400548.6368022,
+    "seen": 1792657423.87525,
+    "ast_hash": "4d56bbe8089822adb434c6aa82680663",
+    "semantic_hash": "4d56bbe8089822adb434c6aa82680663"
+  },
+  "Workshop2026-M2-Gn-Code/services/remediation-engine/requirements.txt": {
+    "mtime": 1792398941.5035808,
+    "seen": 1792657423.8752513,
+    "ast_hash": "5df85faa3211ee4f9d46e066d5a965fa",
+    "semantic_hash": "5df85faa3211ee4f9d46e066d5a965fa"
+  },
+  "Workshop2026-M2-Gn-Code/services/waf/rules/README.md": {
+    "mtime": 1792398898.435627,
+    "seen": 1792657423.875252,
+    "ast_hash": "a1ef07e31091b92dbfa7aafd7800a7d7",
+    "semantic_hash": "a1ef07e31091b92dbfa7aafd7800a7d7"
+  },
+  "Workshop2026-M2-Gn-Code/tests/results/README.md": {
+    "mtime": 1792399497.007937,
+    "seen": 1792657423.8752527,
+    "ast_hash": "b6633106ef84738915cae0c6baef7bee",
+    "semantic_hash": "b6633106ef84738915cae0c6baef7bee"
+  },
+  "kit-attaquant/LISEZMOI.txt": {
+    "mtime": 1792658638.5810528,
+    "seen": 1792658672.4967968,
+    "ast_hash": "22b150ff76e4ea4bb0aa406dd3a576a1",
+    "semantic_hash": ""
+  },
+  "2627_Workshop_Bac+5 - Sujet PROJECT RESILIENCE-ALPHA 1.pdf": {
+    "mtime": 1792659428.7325935,
+    "seen": 1792659459.8500235,
+    "ast_hash": "c79a06409bf4c8d25388c235f47364c2",
+    "semantic_hash": ""
+  },
+  ".claude/settings.json": {
+    "mtime": 1792657107.7352364,
+    "seen": 1792658549.0999515,
+    "ast_hash": "df2daf7c318f9ecc4ad580dfb6bba1de",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1792657107.724793,
+    "seen": 1792658549.1048295,
+    "ast_hash": "67d88e9d0760c3ba54c75dfd9551c1c5",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/tools/incident_report.py": {
+    "mtime": 1792659409.695612,
+    "seen": 1792659459.8464227,
+    "ast_hash": "0b30ab571a71f2ca3d77682718bb1526",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/tools/rapport-incident.sh": {
+    "mtime": 1792659424.6288402,
+    "seen": 1792659459.8464255,
+    "ast_hash": "a73edd70f939c8cbc3360f99e499f7f7",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/scripts/backup_restore.sh": {
+    "mtime": 1792661152.1119542,
+    "seen": 1792661462.829538,
+    "ast_hash": "4c516b063ebf77005788bb5e2921db92",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/scripts/run_tests.sh": {
+    "mtime": 1792661201.3619032,
+    "seen": 1792661462.8297312,
+    "ast_hash": "b0b1b9203ff5201c5f9a4fea2f24f20c",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/tests/conftest.py": {
+    "mtime": 1792661017.4656844,
+    "seen": 1792661462.832979,
+    "ast_hash": "2378a1272c92fe960967569db376e309",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/tests/test_auth.py": {
+    "mtime": 1792661025.4450803,
+    "seen": 1792661462.8329804,
+    "ast_hash": "932d038bab0d35b24b34ab190cb99b79",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/tests/test_payment_api.py": {
+    "mtime": 1792661056.15905,
+    "seen": 1792661462.8329818,
+    "ast_hash": "c5f39632ef71368beeb47b9f6fbf9563",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/tests/requirements-test.txt": {
+    "mtime": 1792661060.8616364,
+    "seen": 1792661462.8362741,
+    "ast_hash": "9b183a72dbba3199d34825fd8a7234c5",
+    "semantic_hash": ""
+  },
+  "Workshop2026-M2-Gn-Code/tests/results/recette.md": {
+    "mtime": 1792661430.5378792,
+    "seen": 1792661462.8363802,
+    "ast_hash": "c3788c560100def29aeacebb82f412b6",
+    "semantic_hash": ""
+  }
+}

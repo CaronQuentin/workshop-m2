@@ -1,0 +1,101 @@
+# WAF = reverse proxy + ModSecurity (OWASP CRS) + liste de blocage dynamique.
+# Seul service publié. Route le trafic vers les backends internes.
+
+# Liste de blocage alimentée par le moteur de remédiation (volume partagé).
+geo $blocked_ip {
+    default 0;
+    include /etc/nginx/blocklist/denied.map;
+}
+
+# Limitation de débit sur l'API (défense en profondeur, activée par la remédiation).
+limit_req_zone $binary_remote_addr zone=payments:10m rate=30r/s;
+
+upstream front_up        { server front:80; }
+upstream payment_api_up  { server payment-api:8000; }
+upstream auth_up         { server auth-service:8000; }
+upstream grafana_up      { server grafana:3000; }
+upstream remediation_up  { server remediation-engine:9000; }
+upstream rag_up          { server rag-assistant:8800; }
+
+server {
+    listen 8080;
+    server_name _;
+
+    # Redirections RELATIVES : sinon nginx émet un 301 absolu qui perd le port publié
+    # (ex: /grafana -> http://localhost/grafana/ sans :8088), mis en cache par le navigateur.
+    absolute_redirect off;
+
+    # Images base64 de la caméra (2FA back-office) : autoriser des corps plus gros.
+    client_max_body_size 12m;
+
+    # ModSecurity + OWASP CRS sont activés GLOBALEMENT par l'image (contexte http) :
+    # on en hérite ici, sans redéclarer modsecurity_rules_file (sinon doublon).
+
+    # --- Blocage par IP (remédiation) ---
+    if ($blocked_ip) { return 403; }
+
+    # journaux lisibles pour Loki (IP source en clair)
+    access_log /var/log/nginx/access.log;
+
+    # Front de paiement
+    location / {
+        proxy_pass http://front_up;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # API de paiement (cible du flood)
+    location /api/ {
+        # Rate-limiting pré-emptif DÉSACTIVÉ : on laisse le flood atteindre l'API pour
+        # que la détection ML et la remédiation (blocage de l'IP source) soient réellement
+        # sollicitées. Le rate-limiting reste une action du catalogue de remédiation.
+        # limit_req zone=payments burst=60 nodelay;
+        # limit_req_status 429;
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass http://payment_api_up;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 5s;
+    }
+
+    # Authentification
+    location /auth/ {
+        rewrite ^/auth/(.*)$ /$1 break;
+        proxy_pass http://auth_up;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # Événements de remédiation en LECTURE SEULE pour la page de supervision du SPA.
+    # /alert (déclenchement) n'est délibérément PAS exposé : il reste interne.
+    location = /remediation/events {
+        limit_except GET { deny all; }
+        proxy_pass http://remediation_up/events;
+    }
+    location = /remediation/services {
+        limit_except GET { deny all; }
+        proxy_pass http://remediation_up/services;
+    }
+
+    # Assistant opérateur (RAG). Réponses longues sur CPU -> timeouts généreux.
+    location = /rag/ask {
+        proxy_pass http://rag_up/ask;
+        proxy_read_timeout 180s;
+        proxy_send_timeout 180s;
+    }
+    location = /rag/health {
+        proxy_pass http://rag_up/health;
+    }
+    location = /remediation/health {
+        proxy_pass http://remediation_up/health;
+    }
+
+    # Grafana (SOC) sous-chemin : on PRÉSERVE le préfixe /grafana (pas de slash final
+    # après grafana_up) car Grafana tourne avec serve_from_sub_path=true.
+    location /grafana/ {
+        proxy_pass http://grafana_up;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
